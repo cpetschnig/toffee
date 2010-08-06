@@ -58,7 +58,7 @@ module Toffee
           if target.respond_to?(method)
             [:logger, target, method]
           else
-            raise TypeError.new("Target object does not respond to method :#{method}.")
+            raise ArgumentError.new("Target object does not respond to method :#{method}.")
           end
         else # no method was given
           if target.respond_to?(:debug)
