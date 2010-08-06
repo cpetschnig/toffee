@@ -1,16 +1,21 @@
-= toffee
+= Toffee
+
+Candy for your "puts"-debugging!
 
 = Usage
 
-Put +.d+ (almost) anywhere in your code to print out debug information:
+Put the method call: "d" (almost) anywhere in your code to print out debug
+information:
 
   ['a', 'b', 'c'].d.first.d.upcase.d
 
 will print out:
 
-["a", "b", "c"]
-"a"
-"A"
+  ["a", "b", "c"]
+  "a"
+  "A"
+
+"d" always returns self, so it will not interfere or do any harm.
 
 = Configure the output (optional)
 
@@ -23,19 +28,19 @@ or
   Toffee.configure(:stdout)
 
 
-Write to any object that implements +:puts+:
+Write to any object that implements ":puts":
 
   Toffee.configure(IO.new(2, 'w'))
 
 
-Write to any object that implements +:debug+:
+Write to any object that implements ":debug":
 
   Toffee.configure(Rails.logger)
 
 
 Write to any object that implements the second parameter:
 
-Toffee.configure(Rails.logger, :info)
+  Toffee.configure(Rails.logger, :info)
 
 
 Write to file using the shell command:
@@ -49,5 +54,5 @@ Write to file using the shell command:
 
 Copyright (c) 2010 Christoph Petschnig. See LICENSE for details.
 
-Inspiration and part of the code taken from
+Inspiration and parts of the code taken from
 Jan Lelis (http://github.com/janlelis/zucker)
