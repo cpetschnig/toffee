@@ -1,17 +1,53 @@
 = toffee
 
-Description goes here.
+= Usage
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Put +.d+ (almost) anywhere in your code to print out debug information:
+
+  ['a', 'b', 'c'].d.first.d.upcase.d
+
+will print out:
+
+["a", "b", "c"]
+"a"
+"A"
+
+= Configure the output (optional)
+
+Write to standard output (default):
+
+  Toffee.configure(STDOUT)
+
+or
+
+  Toffee.configure(:stdout)
+
+
+Write to any object that implements +:puts+:
+
+  Toffee.configure(IO.new(2, 'w'))
+
+
+Write to any object that implements +:debug+:
+
+  Toffee.configure(Rails.logger)
+
+
+Write to any object that implements the second parameter:
+
+Toffee.configure(Rails.logger, :info)
+
+
+Write to file using the shell command:
+
+  $ echo "my output here" > /tmp/foo.log
+
+  Toffee.configure('/tmp/foo.log')
+
 
 == Copyright
 
 Copyright (c) 2010 Christoph Petschnig. See LICENSE for details.
+
+Inspiration and part of the code taken from
+Jan Lelis (http://github.com/janlelis/zucker)
