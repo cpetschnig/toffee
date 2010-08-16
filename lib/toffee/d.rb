@@ -1,11 +1,12 @@
 # This part was very much inspired by Jan Lelis and his talk at RUG-B on
 # August 5th, 2010
 # Find his code at http://github.com/janlelis/zucker/blob/master/lib/zucker/D.rb
-
+#
 # Copyright (c) 2010 Jan Lelis
 
 module Kernel
 
+  #--
   # TODO: check, if there is already a method named d
   # show a warning in that case!
 

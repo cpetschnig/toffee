@@ -49,10 +49,9 @@ Write to file using the shell command:
 
   Toffee.configure('/tmp/foo.log')
 
-== Options
+=== More options to use with Toffee.configure
 
-:timestamp Turn on timestamps with true, turn if off with nil or false; to use
-a custom timestamp format, pass a string with a Time.strftime kind of format
+[<tt>:timestamp</tt>]     Turn on timestamps with true, turn if off with nil or false; to use a custom timestamp format, pass a string with a Time.strftime kind of format
 
 == Copyright
 

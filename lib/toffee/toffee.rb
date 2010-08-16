@@ -11,35 +11,49 @@ module Toffee
   class << self
 
     # Set up the default configuration
-    def init_configuration
+    def init_configuration #:nodoc:
       @@configuration ||= {:target => STDOUT, :target_type => :io}
     end
 
     # Configure the output:
     #
-    # Toffee.configure(STDOUT)          write to standard output (default)
-    # Toffee.configure(:stdout)         write to standard output (default)
+    # Toffee will per default write to standard output. There are two ways to
+    # force this behavior:
     #
-    # Toffee.configure(IO.new(2, 'w'))  write to any object that
-    #                                   implements :puts
+    #  Toffee.configure(STDOUT)
+    # or
+    #  Toffee.configure(:stdout)
     #
-    # Toffee.configure(Rails.logger)    write to any object that
-    #                                   implements :debug
+    # Write the output to any object, that implements a <tt>:puts</tt> method:
     #
-    # Toffee.configure(Rails.logger, :info)
-    #                                   write to any object that
-    #                                   implements the second parameter
+    #  Toffee.configure(IO.new(2, 'w'))
     #
-    # Toffee.configure('/tmp/foo.log')  write to file using the shell command:
-    #                                   $ echo "my output here" > /tmp/foo.log
+    # Or any object that implements a <tt>:debug</tt> method:
     #
-    # Hash with options:
+    #  Toffee.configure(Rails.logger)
     #
-    # :timestamp                        prepend a timestamp on each log message
-    #                                   use true to turn logging on; turn it off
-    #                                   by passing nil or false; pass a string
-    #                                   value to supply a custom format (like
-    #                                   with Time.strftime); default is true
+    # You can also supply your method, that will get called. Pass it as the
+    # second parameter:
+    #
+    #  Toffee.configure(Rails.logger, :info)
+    #
+    # Sometimes it comes very handy to log to a file. Just pass a string with
+    # the filename to write to:
+    #
+    #  Toffee.configure('/tmp/foo.log')
+    #  
+    # Toffee will then use a shell command like the following to write to the
+    # file:
+    #
+    #   $ echo "my output here" > /tmp/foo.log
+    #
+    # <b>More options</b>
+    #
+    # [<tt>:timestamp</tt>]  prepend a timestamp on each log message use true to
+    #                        turn logging on; turn it off by passing nil or
+    #                        false; pass a string value to supply a custom
+    #                        format (like with <tt>Time.strftime</tt>); default
+    #                        is true
     #
     def configure(*args)
       raise ArgumentError if args.empty?
@@ -98,14 +112,15 @@ module Toffee
       self
     end
 
-    # clear the output file
+    # Truncate the output file to zero length
     def clear
       init_configuration
       return unless @@configuration[:target_type] == :file
       %x{echo -n > #{@@configuration[:target]}}
     end
 
-    # write to STDOUT, or to the destination that was configured
+    # Write to STDOUT, or to the destination that was configured with
+    # <tt>Toffee.configure</tt>
     def output(string)
       init_configuration
 
