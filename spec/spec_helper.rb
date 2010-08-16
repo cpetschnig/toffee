@@ -7,3 +7,14 @@ require 'spec/autorun'
 Spec::Runner.configure do |config|
   
 end
+
+class SpecLogger
+  attr_reader :output
+  def test_log(output)
+    @output ||= []
+    @output << output
+  end
+  def clear_log
+    @output = []
+  end
+end

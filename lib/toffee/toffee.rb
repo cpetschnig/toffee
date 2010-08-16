@@ -1,5 +1,7 @@
 module Toffee
 
+  DEFAULT_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S '
+
   # There are several ways, where debugging output can be directed to:
   # STDOUT, :stdout     Standard out is the default destination
   # Any other Object that responds to :puts
@@ -31,6 +33,14 @@ module Toffee
     # Toffee.configure('/tmp/foo.log')  write to file using the shell command:
     #                                   $ echo "my output here" > /tmp/foo.log
     #
+    # Hash with options:
+    #
+    # :timestamp                        prepend a timestamp on each log message
+    #                                   use true to turn logging on; turn it off
+    #                                   by passing nil or false; pass a string
+    #                                   value to supply a custom format (like
+    #                                   with Time.strftime); default is true
+    #
     def configure(*args)
       raise ArgumentError if args.empty?
 
@@ -41,7 +51,7 @@ module Toffee
         raise TypeError.new("Argument two should be kind'a Symbol.") if method && !method.kind_of?(Symbol)
       end
 
-      options = args.last
+      options = args.last || {}
 
       init_configuration
 
@@ -71,10 +81,20 @@ module Toffee
 
       # TODO: implement much, much more features
 
-      # option :with_timestamp
+      # option :timestamp
+      if options.key?(:timestamp)
+        timestamp = options.delete(:timestamp)
+        @@configuration[:timestamp] = timestamp
+        @@configuration[:timestamp_format] = timestamp if timestamp.kind_of?(String)
+      end
 
-      # option :with_backtrace
+
+      # option :with_file_position
+
+      # option :stacktrace
       
+      # option :prefix, :suffix
+
       self
     end
 
@@ -88,11 +108,20 @@ module Toffee
     # write to STDOUT, or to the destination that was configured
     def output(string)
       init_configuration
+
+      string = prepend_timestamp(string) if @@configuration[:timestamp]
+      
       case @@configuration[:target_type]
       when :io then @@configuration[:target].puts(string)
       when :file then %x{echo "#{string.gsub('"', '\\"')}" >> #{@@configuration[:target]}}
       when :logger then @@configuration[:target].send(@@configuration[:method], string)
       end
+    end
+
+    private
+
+    def prepend_timestamp(string)
+      Time.new.strftime(@@configuration[:timestamp_format] || DEFAULT_TIMESTAMP_FORMAT) << string
     end
     
   end

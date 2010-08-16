@@ -9,7 +9,6 @@ module Kernel
   # TODO: check, if there is already a method named d
   # show a warning in that case!
 
-  #def d(*args, &block)
   def d(*args)
     if args.empty?
       tap do

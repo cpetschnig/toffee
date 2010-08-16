@@ -17,7 +17,7 @@ will print out:
 
 "d" always returns self, so it will not interfere or do any harm.
 
-= Configure the output (optional)
+== Configure the output (optional)
 
 Write to standard output (default):
 
@@ -49,6 +49,10 @@ Write to file using the shell command:
 
   Toffee.configure('/tmp/foo.log')
 
+== Options
+
+:timestamp Turn on timestamps with true, turn if off with nil or false; to use
+a custom timestamp format, pass a string with a Time.strftime kind of format
 
 == Copyright
 
