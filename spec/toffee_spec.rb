@@ -40,23 +40,37 @@ describe "Toffee" do
   end
 
   it "works with any object that implements a 'puts' method" do
-
+    obj = ArbitraryObjectWithPutsMethod.new
+    Toffee.configure obj
+    str = rand_str.d
+    obj.output.last.should == %|"#{str}"|
   end
 
   it "writes to a file when configured with a string value" do
-    
+    File.unlink(TEMP_LOG_FILE) if File.exist?(TEMP_LOG_FILE)
+    Toffee.configure TEMP_LOG_FILE
+    str = rand_str.d
+    File.readlines(TEMP_LOG_FILE).last.should == %|"#{str}"\n|
   end
 
   it "writes to an object with an arbitrary method name" do
-
+    obj = ArbitraryObjectWithAsdfMethod.new
+    Toffee.configure obj, :asdf
+    str = rand_str.d
+    obj.output.last.should == %|"#{str}"|
   end
 
   it "writes to any object with a 'debug' method" do
-
+    obj = ArbitraryObjectWithDebugMethod.new
+    Toffee.configure obj
+    str = rand_str.d
+    obj.output.last.should == %|"#{str}"|
   end
 
   it "truncates a file to zero length with the 'clear' method" do
-
+    Toffee.configure TEMP_LOG_FILE
+    Toffee.clear
+    File.size(TEMP_LOG_FILE).should == 0
   end
 
   it "writes timestamps when configured to do so" do
@@ -91,7 +105,8 @@ describe "Toffee" do
   end
 
   it "can compute multiple calls to 'configure'" do
-
+    # already sufficient tested by:
+    #   it "writes timestamps when configured to do so"
   end
 
   it "gives correct file position and call stack output" do
